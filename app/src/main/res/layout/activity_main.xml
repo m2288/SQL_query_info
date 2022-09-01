@@ -40,17 +40,21 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editText" />
 
-    <Button
-        android:id="@+id/btn_Add"
+    <TextView
+        android:id="@+id/textViewResult"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="12dp"
-        android:layout_marginTop="16dp"
-        android:text="Bazaya məlumat əlavə et"
-        android:onClick="onAddQueryClick"
+        android:layout_height="0dp"
+        android:layout_margin="4dp"
+        android:gravity="center"
+        android:padding="8dp"
+        android:text="Sorğu nəticəsi"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.461"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btn_Search" />
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
