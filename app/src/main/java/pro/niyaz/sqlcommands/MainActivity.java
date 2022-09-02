@@ -1,6 +1,5 @@
 package pro.niyaz.sqlcommands;
 
-import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
@@ -18,28 +17,25 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
 
-
     private static final String DB_NAME = "my_db";
-
     private static final int DB_VERSION = 1;
-
     private static final String TABLE_NAME = "SQL_queries_table";
-
     private static final String ID_COL = "id";
-
     private static final String NAME_COL = "command_name";
-
     private static final String DESCRIPTION_COL = "description";
-
+    SQLiteDatabase my_db;
+    EditText editText;
+    Button btn_Search;
+    TextView textViewResult;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        EditText editText = findViewById(R.id.editText);
-        Button btn_Search = findViewById(R.id.btn_Search);
-        TextView textViewResult = findViewById(R.id.textViewResult);
-        SQLiteDatabase my_db = openOrCreateDatabase("my_db", MODE_PRIVATE, null);
+        editText = findViewById(R.id.editText);
+        btn_Search = findViewById(R.id.btn_Search);
+        textViewResult = findViewById(R.id.textViewResult);
+        my_db = openOrCreateDatabase("my_db", MODE_PRIVATE, null);
 
         String query = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + " ("
                 + ID_COL + " INTEGER PRIMARY KEY AUTOINCREMENT, "
@@ -77,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Операции для выбранного пункта меню
+
         switch (item.getItemId()) {
             case pro.niyaz.sqlcommands.R.id.add:
                 Intent intent = new Intent(this, AddQueryActivity.class);
@@ -114,10 +110,25 @@ public class MainActivity extends AppCompatActivity {
     public void onSearchClick(View view) {
         EditText editText = findViewById(R.id.editText);
         String search_query = editText.getText().toString();
-        System.out.println(search_query);
         Cursor cursor;
-        cursor = my_db.rawQuery("SELECT * FROM SQL_queries_table", null);
+        cursor = my_db.rawQuery("SELECT * FROM SQL_queries_table WHERE command_name = '" + search_query + "'", null);
         cursor.moveToFirst();
-        //System.out.print(cursor.getString(cursor.getColumnIndex("id")));
+        //System.out.print(cursor.getString(cursor.getColumnIndexOrThrow("id")));
+        int id;
+        String command_name;
+        String description;
+        String result_text = "";
+        while (cursor.moveToNext()) {
+            id = cursor.getInt(cursor.getColumnIndexOrThrow("id"));
+            command_name = cursor.getString(cursor.getColumnIndexOrThrow("command_name"));
+            description = cursor.getString(cursor.getColumnIndexOrThrow("description"));
+            result_text += command_name + "\n" + id + " " + description;
+        }
+        cursor.close();
+        if (result_text == "") {
+            result_text = "Sorğu üzrə heç bir məlumat tapılmadı";
+        }
+        textViewResult.setText(result_text);
+
     }
 }
